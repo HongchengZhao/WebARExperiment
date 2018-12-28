@@ -8,12 +8,12 @@
 </head>
 
 <body>
-    <a-scene embedded arjs='sourceType: webcam;'>
+    <a-scene embedded arjs='sourceType: webcam; trackingMethod: best; debugUIEnabled: false;'>
         <a-assets>
             <a-asset-item id="smiley" src="assets/CesiumMan.glb"></a-asset-item>
         </a-assets>
         <a-marker preset='hiro'>
-            <a-entity gltf-model="#smiley" rotation="-90 0 0" animation-mixer></a-entity>
+            <a-entity gltf-model="#smiley" rotation="0 0 0" animation-mixer></a-entity>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
