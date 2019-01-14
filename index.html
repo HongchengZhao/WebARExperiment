@@ -43,7 +43,8 @@
                 misaki.setAttribute("animation-mixer", this.data);
             });
 
-            this.el.addEventListener('touch', (e) => {
+            this.el.addEventListener('touchstart', (e) => {
+                e.preventDefault();
                 misaki.setAttribute("animation-mixer", this.data);
             });
 
