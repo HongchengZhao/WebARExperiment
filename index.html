@@ -5,18 +5,49 @@
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
     <script src="js/aframe-extras.min.js"></script>
+    <script>
+    AFRAME.registerComponent('animation-control', {
+        schema: { default: '' },
+        init() {
+            const misaki = document.querySelector('#misaki');
+
+            this.el.addEventListener('click', (e) => {
+                misaki.setAttribute("animation-mixer", this.data);
+            });
+
+        }
+    });
+    </script>
+    <title>Web AR Experiment</title>
 </head>
 
 <body>
     <a-scene embedded arjs='sourceType: webcam; trackingMethod: best; debugUIEnabled: false;'>
         <a-assets>
-            <a-asset-item id="smiley" src="assets/CesiumMan.glb"></a-asset-item>
+            <a-asset-item id="Misaki" src="assets/Misaki/scene.gltf"></a-asset-item>
         </a-assets>
-        <a-marker preset='hiro'>
-            <a-entity gltf-model="#smiley" rotation="0 0 0" animation-mixer></a-entity>
+        <a-marker preset='hiro' emitevents="true" cursor="rayOrigin: mouse" id="animated-marker">
+            <a-entity>
+                <a-entity id="misaki" gltf-model="#Misaki" scale="0.005 0.005 0.005" rotation="0 0 0" animation-mixer="clip: StandA_idleA"></a-entity>
+                <a-entity position="0 0 -1">
+                    <a-text id="idle" position="0 0.5 0" scale="1 1 1" value="IDLE" animation-control="clip: StandA_idleA; crossFadeDuration: .3"></a-text>
+                    <a-text id="jump" position="-0.5 0 0" scale="1 1 1" value="JUMP" animation-control="clip: StandB; crossFadeDuration: .3"></a-text>
+                    <a-text id="walk" position="0 -0.5 0" scale="1 1 1" value="WALK" animation-control="clip: Wallk; crossFadeDuration: .3"></a-text>
+                    <a-text id="run" position="0.5 0 0" scale="1 1 1" value="RUN" animation-control="clip: Run_set; crossFadeDuration: .3"></a-text>
+                </a-entity>
+            </a-entity>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
+    <button id="runBtn" style="position: absolute; width: 200; height: 80; top: 0" data="clip: Run_set; crossFadeDuration: .3">Run</button>
+
+    <script>
+    const runBtn = document.querySelector('#runBtn');
+    runBtn.addEventListener('click', () => {
+        const misaki = document.querySelector('#misaki');
+        misaki.setAttribute("animation-mixer", runBtn.getAttribute('data'));
+    })
+    </script>
 </body>
 
 </html>
