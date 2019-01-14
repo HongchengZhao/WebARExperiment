@@ -2,6 +2,33 @@
 <html>
 
 <head>
+    <style type="text/css" media="screen">
+    .btn-group {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .control-btn {
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        background-color: #ed2f6a;
+        width: 5em;
+        height: 2em;
+        border-radius: 5px;
+        margin: 5px;
+        border: none;
+        color: white;
+        outline: none;
+    }
+
+    .control-btn:hover{
+        cursor: pointer;
+    }
+    </style>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
     <script src="js/aframe-extras.min.js"></script>
@@ -12,6 +39,11 @@
             const misaki = document.querySelector('#misaki');
 
             this.el.addEventListener('click', (e) => {
+                console.log(e);
+                misaki.setAttribute("animation-mixer", this.data);
+            });
+
+            this.el.addEventListener('touch', (e) => {
                 misaki.setAttribute("animation-mixer", this.data);
             });
 
@@ -39,14 +71,20 @@
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
-    <button id="runBtn" style="position: absolute; width: 200; height: 80; top: 0" data="clip: Run_set; crossFadeDuration: .3">Run</button>
-
+    <div class="btn-group">
+        <button id="idleBtn" class="control-btn" data="clip: StandA_idleA; crossFadeDuration: .3">Idle</button>
+        <button id="runBtn" class="control-btn" data="clip: Run_set; crossFadeDuration: .3">Run</button>
+        <button id="walkBtn" class="control-btn" data="clip: Wallk; crossFadeDuration: .3">Walk</button>
+        <button id="jumpBtn" class="control-btn" data="clip: Run_set; crossFadeDuration: .3">Jump</button>
+    </div>
     <script>
-    const runBtn = document.querySelector('#runBtn');
-    runBtn.addEventListener('click', () => {
-        const misaki = document.querySelector('#misaki');
-        misaki.setAttribute("animation-mixer", runBtn.getAttribute('data'));
-    })
+    const controlBtns = document.getElementsByClassName('control-btn');
+    for (let i = 0; i < controlBtns.length; ++i){
+        controlBtns[i].addEventListener('click', () => {
+            const misaki = document.querySelector('#misaki');
+            misaki.setAttribute("animation-mixer", controlBtns[i].getAttribute('data'));
+        })
+    }
     </script>
 </body>
 
