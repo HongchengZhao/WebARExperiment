@@ -39,15 +39,6 @@
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
-    <button id="runBtn" style="position: absolute; width: 200; height: 80; top: 0" data="clip: Run_set; crossFadeDuration: .3">Run</button>
-
-    <script>
-    const runBtn = document.querySelector('#runBtn');
-    runBtn.addEventListener('click', () => {
-        const misaki = document.querySelector('#misaki');
-        misaki.setAttribute("animation-mixer", runBtn.getAttribute('data'));
-    })
-    </script>
 </body>
 
 </html>
