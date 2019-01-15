@@ -54,7 +54,6 @@
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
     <script src="js/aframe-extras.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
     <script>
     AFRAME.registerComponent('animation-control', {
         schema: { default: '' },
@@ -98,7 +97,6 @@
         <button id="standBtn" class="control-btn" data="clip: StandA; crossFadeDuration: .3">Stand</button>
         <button id="singBtn" class="control-btn" data="clip: StandA_idleA; crossFadeDuration: .3">Sing</button>
         <button id="danceBtn" class="control-btn" data="clip: _ForRiggingMotion; crossFadeDuration: .3">Dance</button>
-        <button id="stopBtn" class="control-btn" data="clip: _ForRiggingMotion; crossFadeDuration: .3">Stop</button>
     </div>
     <!-- <div class="btn-group2">
         <button id="talkBtn" class="audio-control-btn">Talk to Misaki</button>
@@ -132,6 +130,7 @@
     });
     </script>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
     <script>
     if (annyang) {
     // Let's define our first command. First the text we expect, and then the function it should call
