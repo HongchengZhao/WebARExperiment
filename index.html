@@ -54,6 +54,7 @@
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
     <script src="js/aframe-extras.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
     <script>
     AFRAME.registerComponent('animation-control', {
         schema: { default: '' },
@@ -85,16 +86,8 @@
         <a-marker preset='hiro' emitevents="true" cursor="rayOrigin: mouse" id="animated-marker">
             <a-entity>
                 <a-gltf-model id="misaki" src="#Misaki" scale="0.005 0.005 0.005" rotation="0 0 0" animation-mixer="clip: StandA_idleA"></a-gltf-model>
-                <a-entity id='singSong' sound="src: url(assets/sound/reunion.mp3); on: sing"></a-entity>
-                <a-entity id='danceSong' sound="src: url(assets/sound/向阳时光.mp3); on: dance"></a-entity>
-                <!--
-                <a-entity position="0 0 -1">
-                    <a-text id="idle" position="0 0.5 0" scale="1 1 1" value="IDLE" animation-control="clip: StandA_idleA; crossFadeDuration: .3"></a-text>
-                    <a-text id="jump" position="-0.5 0 0" scale="1 1 1" value="JUMP" animation-control="clip: StandB; crossFadeDuration: .3"></a-text>
-                    <a-text id="walk" position="0 -0.5 0" scale="1 1 1" value="WALK" animation-control="clip: Wallk; crossFadeDuration: .3"></a-text>
-                    <a-text id="run" position="0.5 0 0" scale="1 1 1" value="RUN" animation-control="clip: Run_set; crossFadeDuration: .3"></a-text>
-                </a-entity>
-            -->
+                <a-entity id='singSong' sound="src: url(assets/sound/reunion.mp3)"></a-entity>
+                <a-entity id='danceSong' sound="src: url(assets/sound/向阳时光.mp3)"></a-entity>
             </a-entity>
         </a-marker>
         <a-entity camera></a-entity>
@@ -105,6 +98,7 @@
         <button id="standBtn" class="control-btn" data="clip: StandA; crossFadeDuration: .3">Stand</button>
         <button id="singBtn" class="control-btn" data="clip: StandA_idleA; crossFadeDuration: .3">Sing</button>
         <button id="danceBtn" class="control-btn" data="clip: _ForRiggingMotion; crossFadeDuration: .3">Dance</button>
+        <button id="stopBtn" class="control-btn" data="clip: _ForRiggingMotion; crossFadeDuration: .3">Stop</button>
     </div>
     <!-- <div class="btn-group2">
         <button id="talkBtn" class="audio-control-btn">Talk to Misaki</button>
@@ -118,57 +112,71 @@
     const dance = new Event('dance');
     const singBtn = document.querySelector('#singBtn');
     const danceBtn = document.querySelector('#danceBtn');
+    
+    for (let i = 0; i < controlBtns.length; ++i) {
+        controlBtns[i].addEventListener('click', () => {
+            misaki.setAttribute("animation-mixer", controlBtns[i].getAttribute('data'));
+            if (controlBtns[i].id !== 'singBtn')
+            	sing_song.components.sound.stopSound();
+            if (controlBtns[i].id !== 'danceBtn')
+            	dance_song.components.sound.stopSound();
+        })
+    }
 
     singBtn.addEventListener('click', () => {
-        sing_song.dispatchEvent(sing);
+        sing_song.components.sound.playSound();
     });
 
     danceBtn.addEventListener('click', () => {
-        dance_song.dispatchEvent(dance);
+        dance_song.components.sound.playSound();
     });
-
-    for (let i = 0; i < controlBtns.length; ++i) {
-        controlBtns[i].addEventListener('click', () => {
-
-            misaki.setAttribute("animation-mixer", controlBtns[i].getAttribute('data'));
-        })
-    }
     </script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
     <script>
     if (annyang) {
     // Let's define our first command. First the text we expect, and then the function it should call
     var commands = {
         '跳(个)舞(吧)': function() {
             console.log("Got message!");
-            dance_song.dispatchEvent(dance);
+            sing_song.components.sound.stopSound();
+            dance_song.components.sound.playSound();
             misaki.setAttribute("animation-mixer","clip: _ForRiggingMotion; crossFadeDuration: .3" );
         },
         
         '唱(个)歌(吧)': function() {
             console.log("Got message!");
-            sing_song.dispatchEvent(sing);
+            sing_song.components.sound.stopSound();
+            sing_song.components.sound.playSound();
             misaki.setAttribute("animation-mixer","clip: StandA_idleA; crossFadeDuration: .3" );
         },
         '打(个)招呼': function() {
             console.log("Got message!");
+            sing_song.components.sound.stopSound();
+            dance_song.components.sound.stopSound();
             misaki.setAttribute("animation-mixer","clip: StandA_idleA; crossFadeDuration: .3" );
         },
         '活动一下': function() {
             console.log("Got message!");
+            sing_song.components.sound.stopSound();
+            dance_song.components.sound.stopSound();
             misaki.setAttribute("animation-mixer","clip: Walk; crossFadeDuration: .3" );
         },
         '休息(一下)': function() {
             console.log("Got message!");
+            sing_song.components.sound.stopSound();
+            dance_song.components.sound.stopSound();
             misaki.setAttribute("animation-mixer","clip: StandA; crossFadeDuration: .3");
         },
         '停(下)': function() {
             console.log("Got message!");
+            sing_song.components.sound.stopSound();
+            dance_song.components.sound.stopSound();
             misaki.setAttribute("animation-mixer","clip: StandA; crossFadeDuration: .3");
         },
         '跑(步)': function() {
             console.log("Got message!");
+            sing_song.components.sound.stopSound();
+            dance_song.components.sound.stopSound();
             misaki.setAttribute("animation-mixer","clip: Run_set; crossFadeDuration: .3");
         },
     };
